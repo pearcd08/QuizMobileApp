@@ -53,8 +53,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void login() {
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
+//        String email = etEmail.getText().toString();
+//        String password = etPassword.getText().toString();
+
+        String email = "test@test.com";
+                String password = "password";
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

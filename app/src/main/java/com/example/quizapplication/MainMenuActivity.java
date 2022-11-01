@@ -3,13 +3,13 @@ package com.example.quizapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,11 +18,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView tvUsername;
+    private Button btnQuiz;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private String userName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,20 @@ public class MainMenuActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //TextViews
         tvUsername = (TextView) findViewById(R.id.tv_menu_username);
+        //Buttons
+        btnQuiz = (Button) findViewById(R.id.btn_menu_quiz);
+        btnQuiz.setOnClickListener(this);
 
         getUser();
 
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == btnQuiz.getId()) {
+            startActivity(new Intent(MainMenuActivity.this, NewQuizActivity.class));
+        }
 
     }
 
@@ -55,14 +68,14 @@ public class MainMenuActivity extends AppCompatActivity {
                         String userName = ds.child("username").getValue(String.class);
                         Boolean isAdmin = ds.child("admin").getValue(Boolean.class);
 
-
-
-                        if(isAdmin){
+                        if (isAdmin) {
                             tvUsername.setText(userName + " is an admin");
-
-                        }
-                        else{
+                            // load menu UI options for an admin
+                            loadAdminUI();
+                        } else {
                             tvUsername.setText(userName + " is a player");
+                            // Load menu UI for a player
+                            loadPlayerUI();
                         }
 
                     }
@@ -76,5 +89,14 @@ public class MainMenuActivity extends AppCompatActivity {
         });
 
     }
+
+    private void loadAdminUI() {
+
+    }
+
+    private void loadPlayerUI() {
+
+    }
+
 
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".NewQuizActivity">
+
+    <TextView
+        android:id="@+id/tv_quiz_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading Question..."/>
+
+    <Button
+        android:id="@+id/btn_quiz_option1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ANSWER 1"/>
+
+    <Button
+        android:id="@+id/btn_quiz_option2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ANSWER 1"/>
+
+
+    <Button
+        android:id="@+id/btn_quiz_option3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ANSWER 1"/>
+
+
+    <Button
+        android:id="@+id/btn_quiz_option4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ANSWER 1"/>
+
+
+
+    <TextView
+        android:id="@+id/tv_quiz_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/0"/>
+
+    <Button
+        android:id="@+id/btn_quiz_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NEXT QUESTION"/>
+
+
+
+
+
+
+
+</LinearLayout>
