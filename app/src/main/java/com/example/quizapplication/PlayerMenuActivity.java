@@ -18,9 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainMenuActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayerMenuActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView tvUsername;
-    private Button btnQuiz;
+    private Button btnQuiz, btnCreateQuiz;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private String userName;
@@ -38,7 +38,11 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         tvUsername = (TextView) findViewById(R.id.tv_menu_username);
         //Buttons
         btnQuiz = (Button) findViewById(R.id.btn_menu_quiz);
+        btnCreateQuiz = findViewById(R.id.btn_menu_createquiz);
         btnQuiz.setOnClickListener(this);
+        btnCreateQuiz.setOnClickListener(this);
+
+
 
         getUser();
 
@@ -48,7 +52,10 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v.getId() == btnQuiz.getId()) {
-            startActivity(new Intent(MainMenuActivity.this, NewQuizActivity.class));
+            startActivity(new Intent(PlayerMenuActivity.this, PlayQuizActivity.class));
+        }
+        if ( v.getId() == btnCreateQuiz.getId()){
+            startActivity(new Intent(PlayerMenuActivity.this, CreateQuizActivity.class));
         }
 
     }
@@ -84,7 +91,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainMenuActivity.this, "Could not load user", Toast.LENGTH_LONG).show();
+                Toast.makeText(PlayerMenuActivity.this, "Could not load user", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class NewQuizActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayQuizActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btnOption1, btnOption2, btnOption3, btnOption4, btnNext;
     private TextView tvQuestion, tvScore;
     private String answer;
@@ -134,7 +134,7 @@ public class NewQuizActivity extends AppCompatActivity implements View.OnClickLi
 
         if (v.getId() == btnNext.getId()){
             if(btnNext.getText().equals("FINISH")){
-                startActivity(new Intent(this, MainMenuActivity.class));
+                startActivity(new Intent(this, PlayerMenuActivity.class));
 
             }
             else{
@@ -175,6 +175,7 @@ public class NewQuizActivity extends AppCompatActivity implements View.OnClickLi
 
                     @Override
                     public void onResponse(JSONObject response) {
+
 
                         try {
                             JSONArray data = response.getJSONArray("results");
