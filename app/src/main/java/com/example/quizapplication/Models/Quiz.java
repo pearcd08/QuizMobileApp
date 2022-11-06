@@ -4,22 +4,36 @@ import java.util.Date;
 
 public class Quiz {
 
+private String quizID;
     private String name;
     private String category;
     private String difficulty;
     private String startDate;
     private String endDate;
+    private int likes;
+    private int dislikes;
 
     public Quiz(){
 
     }
 
-    public Quiz(String name, String category, String difficulty, String startDate, String endDate) {
+    public Quiz(String quizID, String name, String category, String difficulty, String startDate, String endDate, int likes, int dislikes) {
+        this.quizID = quizID;
         this.name = name;
         this.category = category;
         this.difficulty = difficulty;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.likes = likes;
+        this.dislikes = dislikes;
+    }
+
+    public String getQuizID() {
+        return quizID;
+    }
+
+    public void setQuizID(String quizID) {
+        this.quizID = quizID;
     }
 
     public String getName() {
@@ -60,6 +74,22 @@ public class Quiz {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
     }
 }
 

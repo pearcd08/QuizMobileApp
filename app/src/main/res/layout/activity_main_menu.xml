@@ -26,5 +26,11 @@
         android:layout_height="wrap_content"
         android:text="Create Quiz"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_menu_quizzes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
 
 </LinearLayout>

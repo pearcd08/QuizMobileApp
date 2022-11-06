@@ -2,6 +2,8 @@ package com.example.quizapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quizapplication.Models.Quiz;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +28,9 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private String userName;
+    private RecyclerView recyclerView;
+    QuizList_Adapter quizAdapter;
+    private Boolean isAdmin;
 
 
     @Override
@@ -42,9 +49,13 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
         btnQuiz.setOnClickListener(this);
         btnCreateQuiz.setOnClickListener(this);
 
+        recyclerView = findViewById(R.id.rv_menu_quizzes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         getUser();
+        loadCardList();
 
 
     }
@@ -60,6 +71,20 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    private void loadCardList(){
+
+
+        FirebaseRecyclerOptions<Quiz> options =
+                new FirebaseRecyclerOptions.Builder<Quiz>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Quizzes"), Quiz.class)
+                        .build();
+
+
+
+        quizAdapter = new QuizList_Adapter(options);
+        recyclerView.setAdapter(quizAdapter);
+    }
+
     private void getUser() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String uID = currentUser.getUid();
@@ -72,8 +97,8 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     if (ds.child("uid").getValue().equals(uID)) {
-                        String userName = ds.child("username").getValue(String.class);
-                        Boolean isAdmin = ds.child("admin").getValue(Boolean.class);
+                        userName = ds.child("username").getValue(String.class);
+                        isAdmin = ds.child("admin").getValue(Boolean.class);
 
                         if (isAdmin) {
                             tvUsername.setText(userName + " is an admin");
@@ -103,6 +128,18 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
 
     private void loadPlayerUI() {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+       quizAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        quizAdapter.stopListening();
     }
 
 

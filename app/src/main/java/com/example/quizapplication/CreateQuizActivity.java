@@ -1,7 +1,5 @@
 package com.example.quizapplication;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -35,39 +33,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 
 public class CreateQuizActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Spinner catSpinner;
-    private ArrayList<String> categoryNames = new ArrayList<>();
-    private ArrayList<Integer> categoryCodes = new ArrayList<>();
+    private final ArrayList<String> categoryNames = new ArrayList<>();
+    private final ArrayList<Integer> categoryCodes = new ArrayList<>();
     private String quizName, quizCategory, quizDifficulty, quizURL, quizID, quizStartDate, quizEndDate;
     private EditText txtQuizName;
     private TextView tvStartDate, tvEndDate;
     private Button btnEasy, btnMedium, btnHard, btnSaveQuiz;
     private ImageButton btnStartDate, btnEndDate;
-    private DatePickerDialog datePickerDialog;
-
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-
-    RequestQueue queue = null;
-
-
-    public RequestQueue getRequestQueue(Context context) {
-        Log.d("JSON", " getRequestQueue ");
-        if (queue == null) {
-            queue = Volley.newRequestQueue(this);
-        }
-
-        return queue;
-    }
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private RequestQueue queue;
 
 
     @Override
@@ -75,14 +57,12 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_quiz);
 
+        //Get Firebase Table "Users"
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("Quizzes");
-
+        //Start Request Queue
         RequestQueue q = Volley.newRequestQueue(getApplicationContext());
         queue = getRequestQueue(getApplicationContext());
-
-//
-
         //Widgets
         txtQuizName = findViewById(R.id.txt_createquiz_quizname);
         tvStartDate = findViewById(R.id.tv_createquiz_startdate);
@@ -95,7 +75,6 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         btnSaveQuiz = findViewById(R.id.btn_createquiz_savequiz);
         catSpinner = findViewById(R.id.spinner_createquiz_categories);
         txtQuizName = findViewById(R.id.txt_createquiz_quizname);
-
         //Set onClick listeners
         btnEasy.setOnClickListener(this);
         btnMedium.setOnClickListener(this);
@@ -104,9 +83,19 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         btnEndDate.setOnClickListener(this);
         btnSaveQuiz.setOnClickListener(this);
 
+
         loadArray();
         loadSpinner();
 
+    }
+
+    public RequestQueue getRequestQueue(Context context) {
+        Log.d("JSON", " getRequestQueue ");
+        if (queue == null) {
+            queue = Volley.newRequestQueue(this);
+        }
+
+        return queue;
     }
 
     @Override
@@ -141,59 +130,6 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void checkInputs() {
-
-        quizName = txtQuizName.getText().toString();
-
-        if (quizName == null) {
-            Toast.makeText(this, "Please Enter  Quiz Name", Toast.LENGTH_SHORT).show();
-        }
-        if (quizCategory == null) {
-            Toast.makeText(this, "Please Select Category", Toast.LENGTH_SHORT).show();
-        }
-        if (quizDifficulty == null) {
-            Toast.makeText(this, "Please Select Difficulty", Toast.LENGTH_SHORT).show();
-        }
-        if (quizStartDate == null) {
-            Toast.makeText(this, "Please Select Start Date", Toast.LENGTH_SHORT).show();
-        }
-        if (quizEndDate == null) {
-            Toast.makeText(this, "Please Select End Date", Toast.LENGTH_SHORT).show();
-
-        } else if (quizName != null && quizCategory != null && quizDifficulty != null &&
-                quizStartDate != null && quizEndDate != null) {
-
-            quizID = myRef.push().getKey();
-            Quiz quiz = new Quiz(quizName, quizCategory, quizDifficulty, quizStartDate, quizEndDate);
-            myRef.child(quizID).setValue(quiz);
-
-
-            getAPI();
-
-        }
-
-    }
-
-
-    private void loadSpinner() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, categoryNames);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        catSpinner.setAdapter(arrayAdapter);
-        catSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                quizCategory = parent.getItemAtPosition(position).toString();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-
-        });
-    }
 
     private void selectDate(String selection) {
         final Calendar calendar = Calendar.getInstance();
@@ -224,6 +160,94 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+
+    private void checkInputs() {
+
+        quizName = txtQuizName.getText().toString();
+
+        if (quizName == null) {
+            Toast.makeText(this, "Please Enter  Quiz Name", Toast.LENGTH_SHORT).show();
+        }
+        if (quizCategory == null) {
+            Toast.makeText(this, "Please Select Category", Toast.LENGTH_SHORT).show();
+        }
+        if (quizDifficulty == null) {
+            Toast.makeText(this, "Please Select Difficulty", Toast.LENGTH_SHORT).show();
+        }
+        if (quizStartDate == null) {
+            Toast.makeText(this, "Please Select Start Date", Toast.LENGTH_SHORT).show();
+        }
+        if (quizEndDate == null) {
+            Toast.makeText(this, "Please Select End Date", Toast.LENGTH_SHORT).show();
+
+        } else if (quizName != null && quizCategory != null && quizDifficulty != null &&
+                quizStartDate != null && quizEndDate != null) {
+
+
+
+
+            getAPI();
+
+        }
+
+    }
+
+
+    public void getAPI() {
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, createURLString(), null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray data = response.getJSONArray("results");
+                            //Loop through each question in the API response
+                            if (data != null && data.length() > 0){
+                                quizID = myRef.push().getKey();
+                                Quiz quiz = new Quiz(quizID, quizName, quizCategory, quizDifficulty, quizStartDate, quizEndDate, 0, 0);
+                                myRef.child(quizID).setValue(quiz);
+
+
+                                for (int i = 0; i < data.length(); i++) {
+                                    JSONObject questions = data.getJSONObject(i);
+                                    ArrayList<String> answers = new ArrayList<>();
+                                    String questionString = questions.getString("question");
+
+                                    String correctAnswer = questions.getString("correct_answer");
+                                    JSONArray incorrectAnswers = questions.getJSONArray("incorrect_answers");
+                                    for (int j = 0; j < incorrectAnswers.length(); j++) {
+                                        answers.add(incorrectAnswers.get(j).toString());
+                                    }
+                                    answers.add(questions.getString("correct_answer"));
+                                    //Create new Question
+                                    Question q = new Question(questionString, answers.get(0), answers.get(1), answers.get(2), answers.get(3), correctAnswer);
+                                    //Create a nest inside the Quiz id for Questions
+                                    DatabaseReference quizRef = database.getReference("Quizzes").child(quizID).child("Questions");
+                                    //Create a nest for each question in the loop
+                                    quizRef.child("question" + i).setValue(q);
+                                }
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            Toast.makeText(CreateQuizActivity.this, "Couldn't get request from OpenTBD", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+        // Add the request to the RequestQueue.
+        queue.add(jsObjRequest);
+    }
+
     private String createURLString() {
         int index = 0;
         for (int i = 0; i < categoryNames.size(); i++) {
@@ -242,51 +266,6 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         return quizURL;
 
 
-    }
-
-
-    public void getAPI() {
-
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, createURLString(), null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray data = response.getJSONArray("results");
-                            //Loop through each question in the API response
-                            for (int i = 0; i < data.length(); i++) {
-                                JSONObject questions = data.getJSONObject(i);
-                                ArrayList<String> answers = new ArrayList<>();
-                                String questionString = questions.getString("question");
-                                String correctAnswer = questions.getString("correct_answer");
-                                JSONArray incorrectAnswers = questions.getJSONArray("incorrect_answers");
-                                for (int j = 0; j < incorrectAnswers.length(); j++) {
-                                    answers.add(incorrectAnswers.get(j).toString());
-                                }
-                                answers.add(questions.getString("correct_answer"));
-                                //Create new Question
-                                Question q = new Question(questionString, answers.get(0), answers.get(1), answers.get(2), answers.get(3), correctAnswer);
-                                //Create a nest inside the Quiz id for Questions
-                                DatabaseReference quizRef = database.getReference("Quizzes").child(quizID).child("Questions");
-                                //Create a nest for each question in the loop
-                                quizRef.child("question" + i).setValue(q);
-                            }
-
-                        } catch (JSONException e) {
-                            Toast.makeText(CreateQuizActivity.this, "Couldn't get request from OpenTBD", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-        // Add the request to the RequestQueue.
-        queue.add(jsObjRequest);
     }
 
     private void loadArray() {
@@ -315,14 +294,13 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         String c22 = "Gadgets=30";
         String c23 = "Anime & Magna=31";
         String c24 = "Cartoons & Animation=32";
-        String[] categorys = {c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14,
+        String[] categories = {c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14,
                 c15, c16, c17, c18, c19, c20, c21, c22, c23, c24};
         //Sort the array with A-Z sorting
-        Arrays.sort(categorys);
+        Arrays.sort(categories);
         //For each category in the array, split the Category Name and the Category Code
         //Then put them into their own arrays
-        for (int i = 0; i < categorys.length; i++) {
-            String string = categorys[i];
+        for (String string : categories) {
             String[] parts = string.split("=");
             String name = parts[0];
             int code = Integer.parseInt(parts[1]);
@@ -334,5 +312,26 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
             Log.i("Category Name:", categoryNames.get(i));
             Log.i("Category Code:", categoryCodes.get(i).toString());
         }
+    }
+
+    private void loadSpinner() {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, categoryNames);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        catSpinner.setAdapter(arrayAdapter);
+        catSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                quizCategory = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+
+        });
     }
 }
