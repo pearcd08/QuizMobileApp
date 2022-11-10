@@ -21,22 +21,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PlayerMenuActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+public class MainMenuActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
     private TextView tvUsername;
-    private Button btnLogout, btnFilter;
+    private Button btnLogout, btnFilter, btnCreate;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
     private DatabaseReference quizRef, userRef;
-    private String userName, userID;
+    private String userName, userID, admin;
     private RecyclerView recyclerView;
     QuizList_Adapter quizAdapter;
-    private Boolean isAdmin;
     private Long now;
     private ArrayList<Quiz> quizArrayList = new ArrayList<>();
 
@@ -45,6 +43,8 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_menu);
+        //Get current time
+        now = System.currentTimeMillis();
         //Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -58,20 +58,21 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
         //Buttons
         btnFilter = findViewById(R.id.btn_playermenu_filter);
         btnLogout = findViewById(R.id.btn_playermenu_logout);
+        btnCreate = findViewById(R.id.btn_playermenu_create);
         btnFilter.setOnClickListener(this);
         btnLogout.setOnClickListener(this);
+        btnCreate.setOnClickListener(this);
         //Recycler View
         recyclerView = findViewById(R.id.rv_menu_quizzes);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        quizAdapter = new QuizList_Adapter(quizArrayList);
-        //Get current time
-        now = System.currentTimeMillis();
+        btnCreate.setVisibility(View.GONE);
         //start
+
         getUser();
         getQuizzes();
-        //filterRecyclerView("ongoing");
-        Toast.makeText(this, userID, Toast.LENGTH_SHORT).show();
+
+
+
 
 
     }
@@ -85,6 +86,9 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, MainActivity.class));
         }
+        if (v.getId() == btnCreate.getId()) {
+            startActivity(new Intent(this, CreateQuizActivity.class));
+        }
     }
 
     private void getQuizzes() {
@@ -92,15 +96,17 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    Quiz quiz = new Quiz();
-                    quiz = ds.getValue(Quiz.class);
+                    Quiz quiz = ds.getValue(Quiz.class);
                     quizArrayList.add(quiz);
                 }
+                quizAdapter = new QuizList_Adapter(quizArrayList, admin);
+                recyclerView.setAdapter(quizAdapter);
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PlayerMenuActivity.this, "Could not connect to database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainMenuActivity.this, "Could not connect to database", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -145,6 +151,10 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     if (ds.child("uid").getValue().equals(userID)) {
                         userName = ds.child("username").getValue(String.class);
+                        admin = ds.child("admin").getValue(String.class);
+                        if(admin.equals("true")){
+                            btnCreate.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }
@@ -152,8 +162,8 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PlayerMenuActivity.this, "Could not load user", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(PlayerMenuActivity.this, MainActivity.class));
+                Toast.makeText(MainMenuActivity.this, "Could not load user", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
             }
         });
 
@@ -170,7 +180,9 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
 
             }
         }
-        quizAdapter = new QuizList_Adapter(ongoingQuizzes);
+        quizAdapter = new QuizList_Adapter(ongoingQuizzes, admin);
+        recyclerView.setAdapter(quizAdapter);
+        Toast.makeText(this, "ongoing", Toast.LENGTH_SHORT).show();
     }
 
     private void getUpcomingQuizzes() {
@@ -183,7 +195,8 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
 
             }
         }
-        quizAdapter = new QuizList_Adapter(upcomingQuizzes);
+        quizAdapter = new QuizList_Adapter(upcomingQuizzes, admin);
+        recyclerView.setAdapter(quizAdapter);
     }
 
     private void getPastQuizzes() {
@@ -196,7 +209,8 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
 
             }
         }
-        quizAdapter = new QuizList_Adapter(pastQuizzes);
+        quizAdapter = new QuizList_Adapter(pastQuizzes, admin);
+        recyclerView.setAdapter(quizAdapter);
     }
 
     private void getParticipatedQuizzes() {
@@ -208,7 +222,7 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.child("Leaderboard").child(userID).exists()) {
-                        Toast.makeText(PlayerMenuActivity.this, "found player", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainMenuActivity.this, "found player", Toast.LENGTH_SHORT).show();
                         participatedQuizzes.add(quiz);
                     }
 
@@ -220,8 +234,20 @@ public class PlayerMenuActivity extends AppCompatActivity implements View.OnClic
                 }
             });
         }
-        quizAdapter = new QuizList_Adapter(participatedQuizzes);
+        quizAdapter = new QuizList_Adapter(participatedQuizzes, admin);
+        recyclerView.setAdapter(quizAdapter);
     }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        quizArrayList.clear();
+        getQuizzes();
+        getUser();
+
+    }
+
+
 
 
 }

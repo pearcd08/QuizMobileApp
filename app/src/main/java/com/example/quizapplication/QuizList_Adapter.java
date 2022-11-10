@@ -1,39 +1,113 @@
 package com.example.quizapplication;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapplication.Models.Quiz;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class QuizList_Adapter extends RecyclerView.Adapter<QuizList_Holder> {
     private ArrayList<Quiz> mQuizArrayList;
+    String mAdmin;
+    Long now = System.currentTimeMillis();
 
 
-    public QuizList_Adapter(ArrayList<Quiz> quizArrayList) {
+    public QuizList_Adapter(ArrayList<Quiz> quizArrayList, String admin) {
+
         mQuizArrayList = quizArrayList;
+        mAdmin = admin;
     }
 
     @NonNull
     @Override
     public QuizList_Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(parent.getContext())
-                .inflate(R.layout.quiz_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.quiz_card, parent, false);
         return new QuizList_Holder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull QuizList_Holder holder, int position) {
+
+        String quizID = mQuizArrayList.get(position).getQuizID();
+        Long startDate = mQuizArrayList.get(position).getStartDateTime();
+        Long endDate = mQuizArrayList.get(position).getEndDateTime();
+
         holder.tv_Name.setText(mQuizArrayList.get(position).getName());
+        holder.tv_Category.setText(mQuizArrayList.get(position).getCategory());
+        holder.tv_Difficulty.setText(mQuizArrayList.get(position).getDifficulty());
+        holder.tv_StartDate.setText(mQuizArrayList.get(position).getStartDate());
+        holder.tv_EndDate.setText(mQuizArrayList.get(position).getEndDate());
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = user.getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference quizRef = database.getReference("Quizzes");
+        quizRef.child(mQuizArrayList.get(position).getQuizID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("Leaderboard").child(userID).exists()) {
+                    holder.btn_Update.setVisibility(View.GONE);
+                    holder.btn_Play.setVisibility(View.GONE);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        if (mAdmin.equals("true")) {
+            holder.btn_Play.setVisibility(View.GONE);
+            holder.btn_Update.setVisibility(View.VISIBLE);
+            holder.btn_Update.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), UpdateQuizActivity.class);
+                    intent.putExtra("quizID", quizID);
+                    v.getContext().startActivity(intent);
+
+                }
+            });
+        } else if (startDate < now && endDate > now) {
+            holder.btn_Update.setVisibility(View.GONE);
+            holder.btn_Play.setVisibility(View.VISIBLE);
+            holder.btn_Play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), PlayQuizActivity.class);
+                    intent.putExtra("quizID", quizID);
+                    v.getContext().startActivity(intent);
+
+                }
+            });
+
+
+        } else {
+            holder.btn_Update.setVisibility(View.GONE);
+            holder.btn_Play.setVisibility(View.GONE);
+
+
+
+        }
     }
-
 
 
     @Override
@@ -41,9 +115,5 @@ public class QuizList_Adapter extends RecyclerView.Adapter<QuizList_Holder> {
         return mQuizArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-    }
+
 }

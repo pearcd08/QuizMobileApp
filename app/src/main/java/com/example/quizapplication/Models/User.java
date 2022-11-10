@@ -8,19 +8,18 @@ public class User {
     private String UID;
     private String email;
     private String username;
-    private String country;
-    private boolean isAdmin;
+    private String admin;
+
 
     public User() {
 
     }
 
-    public User(String UID, String email, String username, String country, boolean isAdmin) {
+    public User(String UID, String email, String username, String admin) {
         this.UID = UID;
         this.email = email;
         this.username = username;
-        this.country = country;
-        this.isAdmin = isAdmin;
+        this.admin = admin;
     }
 
     public String getUID() {
@@ -47,20 +46,12 @@ public class User {
         this.username = username;
     }
 
-    public String getCountry() {
-        return country;
+    public String getAdmin() {
+        return admin;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(String admin) {
+        this.admin = admin;
     }
 }
 

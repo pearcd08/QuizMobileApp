@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.quizapplication.Models.Question;
 import com.example.quizapplication.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -63,42 +62,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
 
-//        String email = "test@test.com";
-//        String password = "password";
 
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    String userID = user.getUid();
-
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-
-                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot ds : snapshot.getChildren()) {
-                                if (ds.child("uid").getValue().equals(userID)) {
-                                    User newUser = ds.getValue(User.class);
-                                    if (newUser.isAdmin()) {
-                                        startActivity(new Intent(MainActivity.this, AdminMenuActivity.class));
-                                    } else{
-                                        startActivity(new Intent(MainActivity.this, PlayerMenuActivity.class));
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    startActivity(new Intent(MainActivity.this, MainMenuActivity.class));
                 }
             }
         });

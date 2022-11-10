@@ -1,8 +1,5 @@
 package com.example.quizapplication;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -21,16 +18,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.quizapplication.Models.Question;
 import com.example.quizapplication.Models.Score;
 import com.example.quizapplication.Models.User;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,15 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class PlayQuizActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btnOption1, btnOption2, btnOption3, btnOption4, btnNext;
@@ -328,7 +311,7 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
                 .setValue(ServerValue.increment((1)));
         Toast.makeText(this, "liked", Toast.LENGTH_SHORT).show();
         leaderboard();
-        startActivity(new Intent(this, PlayerMenuActivity.class));
+        startActivity(new Intent(this, MainMenuActivity.class));
 
     }
 
@@ -338,7 +321,7 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
                 .setValue(ServerValue.increment((1)));
         Toast.makeText(this, "disliked", Toast.LENGTH_SHORT).show();
         leaderboard();
-        startActivity(new Intent(this, PlayerMenuActivity.class));
+        startActivity(new Intent(this, MainMenuActivity.class));
 
     }
 

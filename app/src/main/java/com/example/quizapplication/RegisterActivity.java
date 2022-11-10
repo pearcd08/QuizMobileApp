@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    private EditText etEmail, etUsername, etCountry, etPassword, etPassword2;
+    private EditText etEmail, etUsername,  etPassword;
     private Button btnSave, btnBack;
     private FirebaseAuth fAuth;
 
@@ -36,7 +36,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //Edittext
         etEmail = (EditText) findViewById(R.id.txt_register_email);
         etUsername = (EditText) findViewById(R.id.txt_register_username);
-        etCountry = (EditText) findViewById(R.id.txt_register_country);
         etEmail = (EditText) findViewById(R.id.txt_register_email);
         etPassword = (EditText) findViewById(R.id.txt_register_password);
 
@@ -64,7 +63,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         String email = etEmail.getText().toString();
         String username = etUsername.getText().toString();
-        String country = etCountry.getText().toString();
         String password = etPassword.getText().toString();
         Boolean isAdmin = false;
 
@@ -100,8 +98,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String UID = fAuth.getCurrentUser().getUid();
-                            User user = new User(UID, email, username, country, false);
-
+                            User user = new User(UID, email, username, "true");
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(fAuth.getCurrentUser().getUid())

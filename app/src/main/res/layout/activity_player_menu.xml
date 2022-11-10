@@ -6,7 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".PlayerMenuActivity">
+    tools:context=".MainMenuActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+
+        <Button
+            android:id="@+id/btn_playermenu_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="filter"/>
+
+        <Button
+            android:id="@+id/btn_playermenu_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="logout"/>
+
+        <Button
+            android:id="@+id/btn_playermenu_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Quiz"/>
+
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_menu_username"
@@ -14,17 +43,6 @@
         android:layout_height="wrap_content"
         android:text="UserName Goes Here"/>
 
-    <Button
-        android:id="@+id/btn_playermenu_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="filter"/>
-
-    <Button
-        android:id="@+id/btn_playermenu_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="logout"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_menu_quizzes"

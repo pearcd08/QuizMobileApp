@@ -8,7 +8,6 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -17,9 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.quizapplication.Models.Question;
 import com.example.quizapplication.Models.Quiz;
-import com.example.quizapplication.Models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -82,7 +79,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v.getId() == btn_cancel.getId()) {
-            startActivity(new Intent(this, PlayerMenuActivity.class));
+            startActivity(new Intent(this, MainMenuActivity.class));
         }
         if (v.getId() == btn_update.getId()) {
             updateQuiz();
@@ -98,7 +95,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
             selectDate("end");
         }
         if (v.getId() == btn_cancel.getId()) {
-            startActivity(new Intent(this, PlayerMenuActivity.class));
+            startActivity(new Intent(this, MainMenuActivity.class));
         }
     }
 
@@ -113,7 +110,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
                     public void onClick(DialogInterface dialog, int which) {
                         quizRef.child(quizID).removeValue();
                         Toast.makeText(UpdateQuizActivity.this, "Successfully deleted Quiz", Toast.LENGTH_SHORT).show() ;
-                        startActivity(new Intent(UpdateQuizActivity.this, PlayerMenuActivity.class));
+                        startActivity(new Intent(UpdateQuizActivity.this, MainMenuActivity.class));
 
                     }
                 });
@@ -143,7 +140,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
                 }
                 else{
                     Toast.makeText(UpdateQuizActivity.this, "Could not access database", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(UpdateQuizActivity.this, PlayerMenuActivity.class));
+                    startActivity(new Intent(UpdateQuizActivity.this, MainMenuActivity.class));
                 }
             }
 
@@ -168,6 +165,8 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
         quizRef.child(quizID).child("endDate").setValue(newEndDate);
         quizRef.child(quizID).child("startDateTime").setValue(quizStartDateMS);
         quizRef.child(quizID).child("endDateTime").setValue(quizEndDateMS);
+        Toast.makeText(this, "Quiz Updated", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MainMenuActivity.class));
 
     }
 

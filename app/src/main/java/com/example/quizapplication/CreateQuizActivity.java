@@ -252,7 +252,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
                                     quizRef.child("question" + i).setValue(q);
                                 }
                                 Toast.makeText(CreateQuizActivity.this, "Quiz Created Successfully", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(CreateQuizActivity.this, PlayerMenuActivity.class));
+                                startActivity(new Intent(CreateQuizActivity.this, MainMenuActivity.class));
 
 
                             }
