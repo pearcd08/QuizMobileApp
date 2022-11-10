@@ -6,50 +6,65 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="#d3d3d3"
     tools:context=".RegisterActivity">
 
-    <EditText
-        android:id="@+id/txt_register_email"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Speed Quiz"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:layout_marginTop="25sp"
+        android:id="@+id/txt_register_email"
+        android:layout_width="300sp"
+        android:layout_height="30sp"
+        android:background="@color/white"
         android:hint="Enter Email"/>
 
     <EditText
         android:id="@+id/txt_register_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300sp"
+        android:layout_height="30sp"
+        android:background="@color/white"
+        android:layout_marginTop="25sp"
         android:hint="Enter Username"/>
 
 
-    <EditText
-        android:id="@+id/txt_register_country"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Select Country"/>
+
 
     <EditText
         android:id="@+id/txt_register_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Password"/>
+        android:layout_width="300sp"
+        android:layout_height="30sp"
+        android:background="@color/white"
+        android:inputType="textPassword"
+        android:hint="Enter Password"
+        android:layout_marginTop="25sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="25sp">
 
         <Button
             android:id="@+id/btn_register_back"
             android:layout_width="100sp"
             android:layout_height="wrap_content"
             android:text="Back"
+            android:layout_marginRight="25sp"
+            android:backgroundTint="@color/blue"
             />
 
         <Button
             android:id="@+id/btn_register_save"
             android:layout_width="100sp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
             android:text="Save"
             />
     </LinearLayout>

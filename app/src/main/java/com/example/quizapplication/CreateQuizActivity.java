@@ -48,7 +48,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
     private final ArrayList<Integer> categoryCodes = new ArrayList<>();
     private String quizName, quizCategory, quizDifficulty, quizURL, quizID, quizStartDate, quizEndDate;
     private Long quizStartDateMS, quizEndDateMS;
-    private EditText txtQuizName;
+    private EditText et_QuizName;
     private TextView tvStartDate, tvEndDate;
     private Button btnEasy, btnMedium, btnHard, btnSaveQuiz;
     private ImageButton btnStartDate, btnEndDate;
@@ -69,7 +69,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         RequestQueue q = Volley.newRequestQueue(getApplicationContext());
         queue = getRequestQueue(getApplicationContext());
         //Widgets
-        txtQuizName = findViewById(R.id.txt_createquiz_quizname);
+        et_QuizName = findViewById(R.id.txt_createquiz_quizname);
         tvStartDate = findViewById(R.id.tv_createquiz_startdate);
         tvEndDate = findViewById(R.id.tv_createquiz_enddate);
         btnEasy = findViewById(R.id.btn_createquiz_easy);
@@ -79,7 +79,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         btnEndDate = findViewById(R.id.btn_createquiz_enddate);
         btnSaveQuiz = findViewById(R.id.btn_createquiz_savequiz);
         catSpinner = findViewById(R.id.spinner_createquiz_categories);
-        txtQuizName = findViewById(R.id.txt_createquiz_quizname);
+
         //Set onClick listeners
         btnEasy.setOnClickListener(this);
         btnMedium.setOnClickListener(this);
@@ -187,25 +187,30 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
 
     private void checkInputs() {
 
-        quizName = txtQuizName.getText().toString();
+        quizName = et_QuizName.getText().toString();
 
-        if (quizName == null) {
+        if (quizName.isEmpty()) {
             Toast.makeText(this, "Please Enter  Quiz Name", Toast.LENGTH_SHORT).show();
         }
-        if (quizCategory == null) {
+        if (quizCategory.isEmpty()) {
             Toast.makeText(this, "Please Select Category", Toast.LENGTH_SHORT).show();
         }
-        if (quizDifficulty == null) {
+        if (quizDifficulty.isEmpty()) {
             Toast.makeText(this, "Please Select Difficulty", Toast.LENGTH_SHORT).show();
         }
-        if (quizStartDate == null) {
+        if (quizStartDate.isEmpty()) {
             Toast.makeText(this, "Please Select Start Date", Toast.LENGTH_SHORT).show();
         }
-        if (quizEndDate == null) {
+        if (quizEndDate.isEmpty()) {
             Toast.makeText(this, "Please Select End Date", Toast.LENGTH_SHORT).show();
 
-        } else if (quizName != null && quizCategory != null && quizDifficulty != null &&
+        }
+        if(quizEndDateMS < quizStartDateMS){
+            Toast.makeText(this, "End Date is before start date", Toast.LENGTH_SHORT).show();
+        }
+        else if (quizName != null && quizCategory != null && quizDifficulty != null &&
                 quizStartDate != null && quizEndDate != null) {
+
 
 
             getAPI();
@@ -213,6 +218,8 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         }
 
     }
+
+
 
 
     public void getAPI() {
@@ -230,6 +237,8 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
                                 Quiz quiz = new Quiz(quizID, quizName, quizCategory,
                                         quizDifficulty, quizStartDate, quizEndDate,
                                         quizStartDateMS, quizEndDateMS, 0, 0);
+
+
                                 myRef.child(quizID).setValue(quiz);
 
 

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ADD8E6"
-    android:gravity="center_horizontal"
+    android:background="#d3d3d3"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".UpdateQuizActivity">
 
@@ -91,30 +91,32 @@
         android:layout_marginTop="50sp">
         <Button
             android:id="@+id/btn_updatequiz_cancel"
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:backgroundTint="@color/blue"
             android:text="CANCEL"
-            android:textSize="18sp"
+
             android:layout_marginRight="20sp"/>
 
         <Button
             android:id="@+id/btn_updatequiz_update"
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
-
+            android:backgroundTint="@color/blue"
             android:gravity="center"
             android:text="UPDATE"
-            android:textSize="18sp" />
+           />
 
         <Button
             android:id="@+id/btn_updatequiz_delete"
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
-
+            android:backgroundTint="@color/blue"
             android:gravity="center"
             android:text="DELETE"
-            android:textSize="18sp"
+
+
             android:layout_marginLeft="20sp"/>
 
 

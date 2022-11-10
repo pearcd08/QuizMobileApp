@@ -20,6 +20,7 @@ public class QuizList_Holder extends RecyclerView.ViewHolder {
         tv_Difficulty = itemView.findViewById(R.id.tv_card_difficulty);
         tv_StartDate = itemView.findViewById(R.id.tv_card_startDate);
         tv_EndDate = itemView.findViewById(R.id.tv_card_endDate);
+        tv_Likes = itemView.findViewById(R.id.tv_card_likes);
 
         btn_Play = itemView.findViewById(R.id.btn_card_play);
         btn_Update = itemView.findViewById(R.id.btn_card_update);

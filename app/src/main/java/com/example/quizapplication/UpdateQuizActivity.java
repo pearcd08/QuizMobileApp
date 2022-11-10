@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quizapplication.Models.Quiz;
+import com.google.android.gms.common.internal.Objects;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,6 +40,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     private DatabaseReference quizRef, userRef;
     private Quiz quiz;
+    private com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,22 +163,52 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
         String newName = et_quizName.getText().toString();
         String newStartDate = tv_startDate.getText().toString();
         String newEndDate = tv_endDate.getText().toString();
-        quizRef.child(quizID).child("name").setValue(newName);
-        quizRef.child(quizID).child("startDate").setValue(newStartDate);
-        quizRef.child(quizID).child("endDate").setValue(newEndDate);
-        quizRef.child(quizID).child("startDateTime").setValue(quizStartDateMS);
-        quizRef.child(quizID).child("endDateTime").setValue(quizEndDateMS);
-        Toast.makeText(this, "Quiz Updated", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, MainMenuActivity.class));
 
+        if (newName.isEmpty()) {
+            et_quizName.setError("Please enter the quiz name");
+            et_quizName.requestFocus();
+            return;
+        }
+
+        if (newStartDate.isEmpty()) {
+            Toast.makeText(this, "Select a start Date", Toast.LENGTH_SHORT).show();
+            btn_startDate.requestFocus();
+            return;
+        }
+
+        if (newEndDate.isEmpty()) {
+            Toast.makeText(this, "Select a end Date", Toast.LENGTH_SHORT).show();
+            btn_endDate.requestFocus();
+            return;
+        }
+        if (quizStartDateMS > quizEndDateMS){
+            Toast.makeText(this, "End date cannot be before start date", Toast.LENGTH_SHORT).show();
+            btn_endDate.requestFocus();
+            return;
+
+        }
+        else{
+            quizRef.child(quizID).child("name").setValue(newName);
+            quizRef.child(quizID).child("startDate").setValue(newStartDate);
+            quizRef.child(quizID).child("endDate").setValue(newEndDate);
+            quizRef.child(quizID).child("startDateTime").setValue(quizStartDateMS);
+            quizRef.child(quizID).child("endDateTime").setValue(quizEndDateMS);
+            Toast.makeText(this, "Quiz Updated", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainMenuActivity.class));
+
+        }
     }
 
+
     private void selectDate(String selection) {
+
         final Calendar calendar = Calendar.getInstance();
 
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 UpdateQuizActivity.this,

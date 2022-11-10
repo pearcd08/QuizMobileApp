@@ -46,11 +46,13 @@ public class QuizList_Adapter extends RecyclerView.Adapter<QuizList_Holder> {
         Long startDate = mQuizArrayList.get(position).getStartDateTime();
         Long endDate = mQuizArrayList.get(position).getEndDateTime();
 
-        holder.tv_Name.setText(mQuizArrayList.get(position).getName());
-        holder.tv_Category.setText(mQuizArrayList.get(position).getCategory());
-        holder.tv_Difficulty.setText(mQuizArrayList.get(position).getDifficulty());
-        holder.tv_StartDate.setText(mQuizArrayList.get(position).getStartDate());
-        holder.tv_EndDate.setText(mQuizArrayList.get(position).getEndDate());
+        holder.tv_Name.setText("Quiz Name+"+mQuizArrayList.get(position).getName());
+        holder.tv_Category.setText("Category: "+mQuizArrayList.get(position).getCategory());
+        holder.tv_Difficulty.setText("Difficulty: "+mQuizArrayList.get(position).getDifficulty());
+        holder.tv_StartDate.setText("Start Date: "+mQuizArrayList.get(position).getStartDate());
+        holder.tv_EndDate.setText("End Date: "+mQuizArrayList.get(position).getEndDate());
+        holder.tv_Likes.setText("Likes: "+mQuizArrayList.get(position).getLikes());
+
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userID = user.getUid();

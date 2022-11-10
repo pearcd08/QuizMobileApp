@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:background="#d3d3d3"
     android:orientation="vertical"
     tools:context=".PlayQuizActivity">
 
@@ -24,6 +25,9 @@
         android:layout_width="350sp"
         android:layout_height="60sp"
         android:layout_marginBottom="10sp"
+        android:backgroundTint="@color/blue"
+
+        android:textStyle="bold"
         android:text="ANSWER 1" />
 
     <Button
@@ -31,6 +35,9 @@
         android:layout_width="350sp"
         android:layout_height="60sp"
         android:layout_marginBottom="10sp"
+        android:backgroundTint="@color/blue"
+
+        android:textStyle="bold"
         android:text="ANSWER 1" />
 
 
@@ -39,6 +46,9 @@
         android:layout_width="350sp"
         android:layout_height="60sp"
         android:layout_marginBottom="10sp"
+        android:backgroundTint="@color/blue"
+
+        android:textStyle="bold"
         android:text="ANSWER 1" />
 
 
@@ -47,6 +57,9 @@
         android:layout_width="350sp"
         android:layout_height="60sp"
         android:layout_marginBottom="10sp"
+        android:backgroundTint="@color/blue"
+
+        android:textStyle="bold"
         android:text="ANSWER 1" />
 
 
@@ -88,6 +101,9 @@
         android:layout_width="175sp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
+        android:backgroundTint="@color/blue"
+        android:textStyle="bold"
+
         android:text="NEXT QUESTION" />
 
 

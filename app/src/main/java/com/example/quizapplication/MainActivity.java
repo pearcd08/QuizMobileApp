@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,8 +60,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void login() {
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
+
+
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        //String email = "test3@gmail.com";
+        //String password = "123456";
+        if (email.isEmpty()) {
+            etEmail.setError("Please enter your email");
+            etEmail.requestFocus();
+            return;
+        }
+
+
+        if (password.isEmpty()) {
+            etPassword.setError("Please enter the password");
+            etPassword.requestFocus();
+            return;
+        }
 
 
 
@@ -69,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     startActivity(new Intent(MainActivity.this, MainMenuActivity.class));
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Wrong email/password", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quizapplication.Models.Quiz;
+import com.example.quizapplication.Models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -92,6 +93,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getQuizzes() {
+        quizArrayList.clear();
         quizRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -101,6 +103,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
                 }
                 quizAdapter = new QuizList_Adapter(quizArrayList, admin);
                 recyclerView.setAdapter(quizAdapter);
+
             }
 
 
@@ -123,6 +126,9 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_filter_all:
+                getQuizzes();
+                return true;
             case R.id.menu_filter_ongoing:
                 getOngoingQuizzes();
                 return true;
@@ -150,11 +156,13 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     if (ds.child("uid").getValue().equals(userID)) {
-                        userName = ds.child("username").getValue(String.class);
-                        admin = ds.child("admin").getValue(String.class);
+                        User user = ds.getValue(User.class);
+
+                        admin = user.getAdmin();
                         if(admin.equals("true")){
                             btnCreate.setVisibility(View.VISIBLE);
                         }
+                        tvUsername.setText(user.getUsername());
 
                     }
                 }

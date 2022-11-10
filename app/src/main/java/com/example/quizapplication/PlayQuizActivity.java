@@ -357,8 +357,7 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-//    Collections.sort(persons, Comparator.comparing(Person::getFname)
-//            .thenComparingInt(Person::getAge));
+
 
 
 }

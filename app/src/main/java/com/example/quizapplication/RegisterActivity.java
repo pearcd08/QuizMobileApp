@@ -98,7 +98,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String UID = fAuth.getCurrentUser().getUid();
-                            User user = new User(UID, email, username, "true");
+                            //set admin in firebase
+                            User user = new User(UID, email, username, "false");
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(fAuth.getCurrentUser().getUid())
