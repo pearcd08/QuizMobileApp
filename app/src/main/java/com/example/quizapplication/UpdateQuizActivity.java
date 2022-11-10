@@ -26,7 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class UpdateQuizActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView tv_startDate, tv_endDate;
@@ -34,6 +37,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
     private Button btn_cancel, btn_update, btn_delete;
     private ImageButton btn_startDate, btn_endDate;
     private String quizName, quizStartDate, quizEndDate, quizID;
+    private Long quizStartDateMS, quizEndDateMS;
     private FirebaseDatabase database;
     private DatabaseReference quizRef, userRef;
     private Quiz quiz;
@@ -162,6 +166,8 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
         quizRef.child(quizID).child("name").setValue(newName);
         quizRef.child(quizID).child("startDate").setValue(newStartDate);
         quizRef.child(quizID).child("endDate").setValue(newEndDate);
+        quizRef.child(quizID).child("startDateTime").setValue(quizStartDateMS);
+        quizRef.child(quizID).child("endDateTime").setValue(quizEndDateMS);
 
     }
 
@@ -180,11 +186,30 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
                                           int monthOfYear, int dayOfMonth) {
                         if (selection.equals("start")) {
                             tv_startDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            quizStartDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Date date = null;
+                            try {
+                                date = sdf.parse(quizStartDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            quizStartDateMS = date.getTime();
+
 
 
 
                         } else {
                             tv_endDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            quizEndDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Date date = null;
+                            try {
+                                date = sdf.parse(quizEndDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            quizEndDateMS = date.getTime();
 
                         }
                     }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_filter_ongoing"
+        android:title="Ongoing" />
+    <item
+        android:id="@+id/menu_filter_upcoming"
+        android:title="Upcoming" />
+    <item
+        android:id="@+id/menu_filter_finished"
+        android:title="Finished" />
+    <item
+        android:id="@+id/menu_filter_participated"
+        android:title="Participated" />
+
+</menu>

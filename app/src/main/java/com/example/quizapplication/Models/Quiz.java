@@ -10,6 +10,8 @@ private String quizID;
     private String difficulty;
     private String startDate;
     private String endDate;
+    private Long startDateTime;
+    private Long endDateTime;
     private int likes;
     private int dislikes;
 
@@ -17,13 +19,15 @@ private String quizID;
 
     }
 
-    public Quiz(String quizID, String name, String category, String difficulty, String startDate, String endDate, int likes, int dislikes) {
+    public Quiz(String quizID, String name, String category, String difficulty, String startDate, String endDate, Long startDateTime, Long endDateTime, int likes, int dislikes) {
         this.quizID = quizID;
         this.name = name;
         this.category = category;
         this.difficulty = difficulty;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.likes = likes;
         this.dislikes = dislikes;
     }
@@ -74,6 +78,22 @@ private String quizID;
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public Long getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(Long startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public Long getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(Long endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public int getLikes() {

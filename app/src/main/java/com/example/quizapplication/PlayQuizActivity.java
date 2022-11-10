@@ -297,7 +297,6 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -305,7 +304,6 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         // show the popup window
-
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 

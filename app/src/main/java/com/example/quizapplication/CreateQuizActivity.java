@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,9 +34,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 public class CreateQuizActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,6 +47,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
     private final ArrayList<String> categoryNames = new ArrayList<>();
     private final ArrayList<Integer> categoryCodes = new ArrayList<>();
     private String quizName, quizCategory, quizDifficulty, quizURL, quizID, quizStartDate, quizEndDate;
+    private Long quizStartDateMS, quizEndDateMS;
     private EditText txtQuizName;
     private TextView tvStartDate, tvEndDate;
     private Button btnEasy, btnMedium, btnHard, btnSaveQuiz;
@@ -145,13 +150,32 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
                         if (selection.equals("start")) {
-                            tvStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            quizStartDate = year + "-" + monthOfYear + "-" + dayOfMonth;
+                            tvStartDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            quizStartDate = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                            Date date = null;
+                            try {
+                                date = sdf.parse(quizStartDate);
+                                quizStartDateMS = date.getTime();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
 
 
-                        } else {
+
+                        } else if (selection.equals("end")) {
                             tvEndDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            quizEndDate = year + "-" + monthOfYear + "-" + dayOfMonth;
+                            quizEndDate = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                            Date date = null;
+                            try {
+                                date = sdf.parse(quizEndDate);
+                                quizEndDateMS = date.getTime();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
                         }
                     }
                 },
@@ -184,8 +208,6 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
                 quizStartDate != null && quizEndDate != null) {
 
 
-
-
             getAPI();
 
         }
@@ -203,9 +225,11 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
                         try {
                             JSONArray data = response.getJSONArray("results");
                             //Loop through each question in the API response
-                            if (data != null && data.length() > 0){
+                            if (data != null && data.length() > 0) {
                                 quizID = myRef.push().getKey();
-                                Quiz quiz = new Quiz(quizID, quizName, quizCategory, quizDifficulty, quizStartDate, quizEndDate, 0, 0);
+                                Quiz quiz = new Quiz(quizID, quizName, quizCategory,
+                                        quizDifficulty, quizStartDate, quizEndDate,
+                                        quizStartDateMS, quizEndDateMS, 0, 0);
                                 myRef.child(quizID).setValue(quiz);
 
 
@@ -227,6 +251,8 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
                                     //Create a nest for each question in the loop
                                     quizRef.child("question" + i).setValue(q);
                                 }
+                                Toast.makeText(CreateQuizActivity.this, "Quiz Created Successfully", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(CreateQuizActivity.this, PlayerMenuActivity.class));
 
 
                             }

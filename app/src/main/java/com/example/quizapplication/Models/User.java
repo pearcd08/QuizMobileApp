@@ -1,5 +1,6 @@
 package com.example.quizapplication.Models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class User {
@@ -8,12 +9,13 @@ public class User {
     private String email;
     private String username;
     private String country;
-    private Boolean isAdmin;
+    private boolean isAdmin;
+
     public User() {
 
     }
 
-    public User(String UID, String email, String username, String country, Boolean isAdmin) {
+    public User(String UID, String email, String username, String country, boolean isAdmin) {
         this.UID = UID;
         this.email = email;
         this.username = username;
@@ -53,11 +55,13 @@ public class User {
         this.country = country;
     }
 
-    public Boolean getAdmin() {
+    public boolean isAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean admin) {
+    public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
 }
+
+
