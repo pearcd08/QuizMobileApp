@@ -230,8 +230,9 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.child("Leaderboard").child(userID).exists()) {
-                        Toast.makeText(MainMenuActivity.this, "found player", Toast.LENGTH_SHORT).show();
                         participatedQuizzes.add(quiz);
+                        quizAdapter = new QuizList_Adapter(participatedQuizzes, admin);
+                        recyclerView.setAdapter(quizAdapter);
                     }
 
                 }
@@ -241,9 +242,10 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
                 }
             });
+
+
         }
-        quizAdapter = new QuizList_Adapter(participatedQuizzes, admin);
-        recyclerView.setAdapter(quizAdapter);
+
     }
 
     @Override

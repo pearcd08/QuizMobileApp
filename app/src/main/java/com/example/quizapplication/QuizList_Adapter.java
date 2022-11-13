@@ -46,7 +46,7 @@ public class QuizList_Adapter extends RecyclerView.Adapter<QuizList_Holder> {
         Long startDate = mQuizArrayList.get(position).getStartDateTime();
         Long endDate = mQuizArrayList.get(position).getEndDateTime();
 
-        holder.tv_Name.setText("Quiz Name+"+mQuizArrayList.get(position).getName());
+        holder.tv_Name.setText("Quiz Name: "+mQuizArrayList.get(position).getName());
         holder.tv_Category.setText("Category: "+mQuizArrayList.get(position).getCategory());
         holder.tv_Difficulty.setText("Difficulty: "+mQuizArrayList.get(position).getDifficulty());
         holder.tv_StartDate.setText("Start Date: "+mQuizArrayList.get(position).getStartDate());

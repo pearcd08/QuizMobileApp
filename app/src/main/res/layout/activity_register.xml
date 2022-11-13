@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Speed Quiz Register"
         android:textSize="36sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <EditText
         android:layout_marginTop="25sp"
@@ -43,6 +43,12 @@
         android:inputType="textPassword"
         android:hint="Enter Password"
         android:layout_marginTop="25sp"/>
+
+    <CheckBox
+        android:id="@+id/cbox_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Account"/>
 
     <LinearLayout
         android:layout_width="match_parent"

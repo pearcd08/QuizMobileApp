@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,12 +24,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText etEmail, etUsername,  etPassword;
     private Button btnSave, btnBack;
     private FirebaseAuth fAuth;
+    private CheckBox cbox;
+    private String admin;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        //Set admin to false by default
+        admin = "false";
 
         //Firebase
         fAuth = FirebaseAuth.getInstance();
@@ -45,6 +51,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btnBack = (Button) findViewById(R.id.btn_register_back);
         btnBack.setOnClickListener(this);
 
+        //Checkbox
+        cbox = (CheckBox) findViewById(R.id.cbox_register);
+        cbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checked = ((CheckBox) v).isChecked();
+
+                if(checked){
+                    admin = "true";
+                }
+                else{
+                    admin = "false";
+                }
+            }
+        });
+
+
+    }
+
+    public void Check(View v){
 
     }
 
@@ -99,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if (task.isSuccessful()) {
                             String UID = fAuth.getCurrentUser().getUid();
                             //set admin in firebase
-                            User user = new User(UID, email, username, "false");
+                            User user = new User(UID, email, username, admin);
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(fAuth.getCurrentUser().getUid())

@@ -8,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -40,6 +41,8 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
     private FirebaseDatabase database;
     private DatabaseReference quizRef, userRef;
     private Quiz quiz;
+    private Long startDateMS;
+    private Long endDateMS;
     private com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog;
 
     @Override
@@ -124,7 +127,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
         });
 
         AlertDialog dialog = builder.create();
-        dialog.show();
+
 
     }
 
@@ -140,6 +143,8 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
                     et_quizName.setText(quiz.getName(), TextView.BufferType.EDITABLE);
                     tv_startDate.setText(quiz.getStartDate());
                     tv_endDate.setText(quiz.getEndDate());
+                    startDateMS = quiz.getStartDateTime();
+                    endDateMS = quiz.getEndDateTime();
                 }
                 else{
                     Toast.makeText(UpdateQuizActivity.this, "Could not access database", Toast.LENGTH_SHORT).show();
@@ -163,6 +168,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
         String newName = et_quizName.getText().toString();
         String newStartDate = tv_startDate.getText().toString();
         String newEndDate = tv_endDate.getText().toString();
+
 
         if (newName.isEmpty()) {
             et_quizName.setError("Please enter the quiz name");

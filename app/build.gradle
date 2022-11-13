@@ -49,5 +49,7 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.3'
+
 
 }

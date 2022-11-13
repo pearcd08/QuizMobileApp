@@ -3,6 +3,7 @@ package com.example.quizapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -215,18 +218,17 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
         if (i == 9) {
             btnNext.setText("FINISH");
         }
-        //set the question text
-        String fixQuestion = questionArray.get(i).getQuestion().replaceAll("&quot;","\"");
+        //set the question text and convert html formatted text
+        String fixQuestion =  StringEscapeUtils.unescapeHtml4(questionArray.get(i).getQuestion());
         tvQuestion.setText(fixQuestion);
-        //set the answer
-        answer = questionArray.get(i).getCorrectAnswer();
-        Toast.makeText(this, answer, Toast.LENGTH_SHORT).show();
-        //put answers into an array list
+        //set the answer and convert html formatted text
+        answer = StringEscapeUtils.unescapeHtml4(questionArray.get(i).getCorrectAnswer());
+        //put answers into an array list and convert html formatted text
         ArrayList<String> answersList = new ArrayList<>();
-        answersList.add(questionArray.get(i).getAnswer1());
-        answersList.add(questionArray.get(i).getAnswer2());
-        answersList.add(questionArray.get(i).getAnswer3());
-        answersList.add(questionArray.get(i).getAnswer4());
+        answersList.add(StringEscapeUtils.unescapeHtml4(questionArray.get(i).getAnswer1()));
+        answersList.add(StringEscapeUtils.unescapeHtml4(questionArray.get(i).getAnswer2()));
+        answersList.add(StringEscapeUtils.unescapeHtml4(questionArray.get(i).getAnswer3()));
+        answersList.add(StringEscapeUtils.unescapeHtml4(questionArray.get(i).getAnswer4()));
         //shuffle list
         Collections.shuffle(answersList);
         //set the text of the buttons to the shuffled answer list
@@ -239,6 +241,11 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
         btnOption2.setBackgroundColor(getResources().getColor(R.color.blue));
         btnOption3.setBackgroundColor(getResources().getColor(R.color.blue));
         btnOption4.setBackgroundColor(getResources().getColor(R.color.blue));
+        //Enable the buttons
+        btnOption1.setEnabled(true);
+        btnOption2.setEnabled(true);
+        btnOption3.setEnabled(true);
+        btnOption4.setEnabled(true);
 
     }
 
@@ -255,6 +262,24 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
             btnOption4.setBackgroundColor(getResources().getColor(R.color.green));
         }
         updateScore(false);
+
+    }
+
+
+
+
+    private void updateScore(Boolean result) {
+        if(result){
+            quizScore++;
+        }
+        //Disable the buttons
+        btnOption1.setEnabled(false);
+        btnOption2.setEnabled(false);
+        btnOption3.setEnabled(false);
+        btnOption4.setEnabled(false);
+
+        tvScore.setText(String.valueOf(quizScore)+"/"+(questionNo+1));
+        btnNext.setEnabled(true);
 
     }
 
@@ -287,19 +312,8 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         // show the popup window
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(view, Gravity.CENTER_HORIZONTAL, 0, 0);
 
-
-    }
-
-
-    private void updateScore(Boolean result) {
-        if(result){
-            quizScore++;
-        }
-
-        tvScore.setText(String.valueOf(quizScore)+"/"+(questionNo+1));
-        btnNext.setEnabled(true);
 
     }
 
