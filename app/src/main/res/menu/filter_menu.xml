@@ -4,16 +4,17 @@
         android:id="@+id/menu_filter_all"
         android:title="All" />
     <item
-        android:id="@+id/menu_filter_ongoing"
-        android:title="Ongoing" />
+        android:id="@+id/menu_filter_eligible"
+        android:title="Eligible" />
+    <item
+        android:id="@+id/menu_filter_participated"
+        android:title="Participated" />
     <item
         android:id="@+id/menu_filter_upcoming"
         android:title="Upcoming" />
     <item
         android:id="@+id/menu_filter_finished"
         android:title="Finished" />
-    <item
-        android:id="@+id/menu_filter_participated"
-        android:title="Participated" />
+
 
 </menu>

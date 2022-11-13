@@ -50,7 +50,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
     private Long quizStartDateMS, quizEndDateMS;
     private EditText et_QuizName;
     private TextView tvStartDate, tvEndDate;
-    private Button btnEasy, btnMedium, btnHard, btnSaveQuiz;
+    private Button btnEasy, btnMedium, btnHard, btnSaveQuiz, btnBack;
     private ImageButton btnStartDate, btnEndDate;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -76,6 +76,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         btnMedium = findViewById(R.id.btn_createquiz_medium);
         btnHard = findViewById(R.id.btn_createquiz_hard);
         btnStartDate = findViewById(R.id.btn_createquiz_startdate);
+        btnBack = findViewById(R.id.btn_createquiz_back);
         btnEndDate = findViewById(R.id.btn_createquiz_enddate);
         btnSaveQuiz = findViewById(R.id.btn_createquiz_savequiz);
         catSpinner = findViewById(R.id.spinner_createquiz_categories);
@@ -87,7 +88,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         btnStartDate.setOnClickListener(this);
         btnEndDate.setOnClickListener(this);
         btnSaveQuiz.setOnClickListener(this);
-
+        btnBack.setOnClickListener(this);
 
         loadArray();
         loadSpinner();
@@ -108,20 +109,23 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         if (v.getId() == btnEasy.getId()) {
             quizDifficulty = "easy";
             btnEasy.setBackgroundColor(Color.YELLOW);
-            btnMedium.setBackgroundColor(Color.BLUE);
-            btnHard.setBackgroundColor(Color.BLUE);
+            btnEasy.setTextColor(Color.BLACK);
+            btnMedium.setBackgroundColor(getResources().getColor(R.color.blue));
+            btnHard.setBackgroundColor(getResources().getColor(R.color.blue));
         }
         if (v.getId() == btnMedium.getId()) {
             quizDifficulty = "medium";
-            btnEasy.setBackgroundColor(Color.BLUE);
+            btnEasy.setBackgroundColor(getResources().getColor(R.color.blue));
             btnMedium.setBackgroundColor(Color.YELLOW);
-            btnHard.setBackgroundColor(Color.BLUE);
+            btnMedium.setTextColor(Color.BLACK);
+            btnHard.setBackgroundColor(getResources().getColor(R.color.blue));
         }
         if (v.getId() == btnHard.getId()) {
             quizDifficulty = "hard";
-            btnEasy.setBackgroundColor(Color.BLUE);
-            btnMedium.setBackgroundColor(Color.BLUE);
+            btnEasy.setBackgroundColor(getResources().getColor(R.color.blue));
+            btnMedium.setBackgroundColor(getResources().getColor(R.color.blue));
             btnHard.setBackgroundColor(Color.YELLOW);
+            btnHard.setTextColor(Color.BLACK);
         }
         if (v.getId() == btnStartDate.getId()) {
             selectDate("start");
@@ -131,6 +135,9 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         }
         if (v.getId() == btnSaveQuiz.getId()) {
             checkInputs();
+        }
+        if(v.getId() == btnBack.getId()){
+            startActivity(new Intent(this, MainMenuActivity.class));
         }
 
     }
@@ -191,22 +198,28 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
 
         if (quizName.isEmpty()) {
             Toast.makeText(this, "Please Enter  Quiz Name", Toast.LENGTH_SHORT).show();
+            return;
         }
-        if (quizCategory.isEmpty()) {
+        if (quizCategory == null) {
             Toast.makeText(this, "Please Select Category", Toast.LENGTH_SHORT).show();
+            return;
         }
-        if (quizDifficulty.isEmpty()) {
+        if (quizDifficulty == null) {
             Toast.makeText(this, "Please Select Difficulty", Toast.LENGTH_SHORT).show();
+            return;
         }
-        if (quizStartDate.isEmpty()) {
+        if (quizStartDate == null) {
             Toast.makeText(this, "Please Select Start Date", Toast.LENGTH_SHORT).show();
+            return;
         }
-        if (quizEndDate.isEmpty()) {
+        if (quizEndDate == null) {
             Toast.makeText(this, "Please Select End Date", Toast.LENGTH_SHORT).show();
+            return;
 
         }
         if(quizEndDateMS < quizStartDateMS){
             Toast.makeText(this, "End Date is before start date", Toast.LENGTH_SHORT).show();
+            return;
         }
         else if (quizName != null && quizCategory != null && quizDifficulty != null &&
                 quizStartDate != null && quizEndDate != null) {

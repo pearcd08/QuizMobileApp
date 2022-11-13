@@ -24,6 +24,8 @@ public class QuizList_Holder extends RecyclerView.ViewHolder {
 
         btn_Play = itemView.findViewById(R.id.btn_card_play);
         btn_Update = itemView.findViewById(R.id.btn_card_update);
+        btn_Play.setVisibility(View.GONE);
+        btn_Update.setVisibility(View.GONE);
 
     }
 }

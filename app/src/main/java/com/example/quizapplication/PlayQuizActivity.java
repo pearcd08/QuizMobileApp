@@ -45,7 +45,7 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
     private int quizScore = 0;
     private FirebaseDatabase database;
     private DatabaseReference quizRef, userRef;
-    private ArrayList<Question> questionArray = new ArrayList<>();
+    private final ArrayList<Question> questionArray = new ArrayList<>();
     private View popupView;
     private LayoutInflater inflater;
 
@@ -193,7 +193,7 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Question question = snapshot.getValue(Question.class);
-                    Log.d("QUESTIONS",question.getQuestion().toString());
+                    Log.d("QUESTIONS", question.getQuestion());
                     questionArray.add(question);
                 }
                 nextQuestion(questionNo);
@@ -278,7 +278,7 @@ public class PlayQuizActivity extends AppCompatActivity implements View.OnClickL
         btnOption3.setEnabled(false);
         btnOption4.setEnabled(false);
 
-        tvScore.setText(String.valueOf(quizScore)+"/"+(questionNo+1));
+        tvScore.setText(quizScore +"/"+(questionNo+1));
         btnNext.setEnabled(true);
 
     }

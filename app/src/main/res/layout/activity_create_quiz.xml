@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#d3d3d3"
     android:gravity="left"
     android:orientation="vertical"
-    android:background="#d3d3d3"
     tools:context=".CreateQuizActivity">
 
 
@@ -23,10 +23,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
         android:layout_marginLeft="50dp"
-        android:textSize="18sp"
-        android:text="Enter Quiz Name:" />
+        android:layout_marginTop="20sp"
+        android:text="Enter Quiz Name:"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/txt_createquiz_quizname"
@@ -35,16 +35,16 @@
         android:layout_marginLeft="50sp"
         android:layout_marginRight="50sp"
 
-        android:textSize="18sp"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:textSize="18sp" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:text="Select Category:"
-        android:layout_marginLeft="50dp"
         android:textSize="18sp" />
 
     <Spinner
@@ -53,21 +53,21 @@
         android:layout_height="30sp"
         android:layout_marginLeft="50sp"
         android:layout_marginRight="50sp"
-        android:textSize="18sp"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="50sp"
         android:layout_marginTop="20sp"
-        android:textSize="18sp"
         android:text="Select Difficulty"
-        android:layout_marginLeft="50sp"/>
+        android:textSize="18sp" />
 
     <LinearLayout
-        android:layout_marginTop="10sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -75,99 +75,103 @@
             android:id="@+id/btn_createquiz_easy"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
             android:backgroundTint="@color/blue"
-            android:text="EASY"
-            android:layout_marginRight="25dp"/>
+            android:text="EASY" />
 
         <Button
             android:id="@+id/btn_createquiz_medium"
             android:layout_width="100dp"
-            android:backgroundTint="@color/blue"
             android:layout_height="wrap_content"
-            android:text="NORMAL"
-            android:layout_marginRight="25dp"/>
+            android:layout_marginRight="25dp"
+            android:backgroundTint="@color/blue"
+            android:text="NORMAL" />
 
         <Button
             android:id="@+id/btn_createquiz_hard"
             android:layout_width="100dp"
-            android:backgroundTint="@color/blue"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
             android:text="HARD" />
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="50sp"
         android:layout_marginTop="20sp"
-        android:textSize="18sp"
         android:text="Select Running Time"
-        android:layout_marginLeft="50sp"/>
+        android:textSize="18sp" />
+
     <LinearLayout
-        android:layout_marginTop="10sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_marginTop="10sp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_createquiz_startdate"
             android:layout_width="100sp"
             android:layout_height="wrap_content"
-            android:text="Start Date"
-            android:textSize="18sp"
             android:background="@color/white"
-            />.
+            android:text="Start Date"
+            android:textSize="18sp" />.
 
         <ImageButton
             android:id="@+id/btn_createquiz_startdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_calender"
+            android:layout_marginRight="25dp"
             android:backgroundTint="#0000"
-            android:layout_marginRight="25dp"/>
+            android:src="@drawable/ic_calender" />
 
         <TextView
             android:id="@+id/tv_createquiz_enddate"
             android:layout_width="100sp"
             android:layout_height="wrap_content"
-            android:text="End Date"
-            android:textSize="18sp"
             android:background="@color/white"
-            />.
+            android:text="End Date"
+            android:textSize="18sp" />.
 
         <ImageButton
             android:id="@+id/btn_createquiz_enddate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_calender"
-            android:backgroundTint="#0000"/>
+            android:backgroundTint="#0000"
+            android:src="@drawable/ic_calender" />
 
 
     </LinearLayout>
+
     <LinearLayout
-        android:layout_marginTop="25sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_marginTop="25sp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_createquiz_back"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25sp"
+            android:backgroundTint="@color/blue"
+            android:gravity="center"
+            android:text="Back" />
+
         <Button
             android:id="@+id/btn_createquiz_savequiz"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="18sp"
             android:backgroundTint="@color/blue"
-            android:text="CREATE QUIZ"/>
+            android:gravity="center"
+            android:text="Save" />
 
 
-   </LinearLayout>
-
-
-
-
-
-
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">QuizApplication</string>
+    <string name="delete">DELETE</string>
 </resources>

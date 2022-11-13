@@ -33,11 +33,11 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
     private DatabaseReference quizRef, userRef;
-    private String userName, userID, admin;
+    private String userID, admin;
     private RecyclerView recyclerView;
     QuizList_Adapter quizAdapter;
     private Long now;
-    private ArrayList<Quiz> quizArrayList = new ArrayList<>();
+    private final ArrayList<Quiz> quizArrayList = new ArrayList<>();
 
 
     @Override
@@ -67,13 +67,10 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         recyclerView = findViewById(R.id.rv_menu_quizzes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         btnCreate.setVisibility(View.GONE);
+
         //start
 
         getUser();
-        getQuizzes();
-
-
-
 
 
     }
@@ -90,6 +87,34 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         if (v.getId() == btnCreate.getId()) {
             startActivity(new Intent(this, CreateQuizActivity.class));
         }
+    }
+
+    private void getUser() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (ds.child("uid").getValue().equals(userID)) {
+                        User user = ds.getValue(User.class);
+
+                        admin = user.getAdmin();
+                        if (admin.equals("true")) {
+                            btnCreate.setVisibility(View.VISIBLE);
+                        }
+                        tvUsername.setText("Welcome "+user.getUsername());
+
+                    }
+                }
+                getQuizzes();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainMenuActivity.this, "Could not load user", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
+            }
+        });
+
     }
 
     private void getQuizzes() {
@@ -129,8 +154,8 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
             case R.id.menu_filter_all:
                 getQuizzes();
                 return true;
-            case R.id.menu_filter_ongoing:
-                getOngoingQuizzes();
+            case R.id.menu_filter_eligible:
+                getEligibleQuizzes();
                 return true;
             case R.id.menu_filter_finished:
                 getPastQuizzes();
@@ -140,7 +165,6 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
                 return true;
             case R.id.menu_filter_participated:
                 getParticipatedQuizzes();
-                ;
                 return true;
             default:
                 return false;
@@ -148,49 +172,32 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-//
 
-    private void getUser() {
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    if (ds.child("uid").getValue().equals(userID)) {
-                        User user = ds.getValue(User.class);
-
-                        admin = user.getAdmin();
-                        if(admin.equals("true")){
-                            btnCreate.setVisibility(View.VISIBLE);
-                        }
-                        tvUsername.setText(user.getUsername());
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainMenuActivity.this, "Could not load user", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
-            }
-        });
-
-    }
-
-    private void getOngoingQuizzes() {
-        ArrayList<Quiz> ongoingQuizzes = new ArrayList();
+    private void getEligibleQuizzes() {
+        ArrayList<Quiz> eligibleQuizzes = new ArrayList();
         for (int i = 0; i < quizArrayList.size(); i++) {
             Quiz quiz = quizArrayList.get(i);
+            String quizID = quiz.getQuizID();
             Long startDate = quiz.getStartDateTime();
             Long endDate = quiz.getEndDateTime();
             if (startDate <= now && endDate >= now) {
-                ongoingQuizzes.add(quiz);
+                quizRef.child(quizID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.child("Leaderboard").child(userID).exists()) {
+                            eligibleQuizzes.add(quiz);
+                            quizAdapter = new QuizList_Adapter(eligibleQuizzes, admin);
+                            recyclerView.setAdapter(quizAdapter);
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         }
-        quizAdapter = new QuizList_Adapter(ongoingQuizzes, admin);
-        recyclerView.setAdapter(quizAdapter);
-        Toast.makeText(this, "ongoing", Toast.LENGTH_SHORT).show();
     }
 
     private void getUpcomingQuizzes() {
@@ -256,8 +263,6 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
         getUser();
 
     }
-
-
 
 
 }

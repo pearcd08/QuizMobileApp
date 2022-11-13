@@ -39,11 +39,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
     private String quizName, quizStartDate, quizEndDate, quizID;
     private Long quizStartDateMS, quizEndDateMS;
     private FirebaseDatabase database;
-    private DatabaseReference quizRef, userRef;
-    private Quiz quiz;
-    private Long startDateMS;
-    private Long endDateMS;
-    private com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog;
+    private DatabaseReference quizRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +111,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         quizRef.child(quizID).removeValue();
-                        Toast.makeText(UpdateQuizActivity.this, "Successfully deleted Quiz", Toast.LENGTH_SHORT).show() ;
+                        Toast.makeText(UpdateQuizActivity.this, "Successfully deleted "+quizName, Toast.LENGTH_SHORT).show() ;
                         startActivity(new Intent(UpdateQuizActivity.this, MainMenuActivity.class));
 
                     }
@@ -127,7 +123,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
         });
 
         AlertDialog dialog = builder.create();
-
+        dialog.show();
 
     }
 
@@ -143,8 +139,8 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
                     et_quizName.setText(quiz.getName(), TextView.BufferType.EDITABLE);
                     tv_startDate.setText(quiz.getStartDate());
                     tv_endDate.setText(quiz.getEndDate());
-                    startDateMS = quiz.getStartDateTime();
-                    endDateMS = quiz.getEndDateTime();
+                    quizStartDateMS = quiz.getStartDateTime();
+                    quizEndDateMS = quiz.getEndDateTime();
                 }
                 else{
                     Toast.makeText(UpdateQuizActivity.this, "Could not access database", Toast.LENGTH_SHORT).show();
@@ -187,7 +183,7 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
             btn_endDate.requestFocus();
             return;
         }
-        if (quizStartDateMS > quizEndDateMS){
+        if (quizStartDateMS != null && quizEndDateMS != null && quizStartDateMS > quizEndDateMS){
             Toast.makeText(this, "End date cannot be before start date", Toast.LENGTH_SHORT).show();
             btn_endDate.requestFocus();
             return;
@@ -207,14 +203,11 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
 
 
     private void selectDate(String selection) {
-
         final Calendar calendar = Calendar.getInstance();
 
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 UpdateQuizActivity.this,
@@ -223,31 +216,31 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
                         if (selection.equals("start")) {
-                            tv_startDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            quizStartDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            tv_startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            quizStartDate = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                             Date date = null;
                             try {
                                 date = sdf.parse(quizStartDate);
+                                quizStartDateMS = date.getTime();
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            quizStartDateMS = date.getTime();
 
 
 
-
-                        } else {
+                        } else if (selection.equals("end")) {
                             tv_endDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            quizEndDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            quizEndDate = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                             Date date = null;
                             try {
                                 date = sdf.parse(quizEndDate);
+                                quizEndDateMS = date.getTime();
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            quizEndDateMS = date.getTime();
+
 
                         }
                     }
@@ -256,5 +249,6 @@ public class UpdateQuizActivity extends AppCompatActivity implements View.OnClic
         datePickerDialog.show();
 
     }
+
 
 }
